@@ -14,8 +14,11 @@ public:
 	vk::Result CreateSurface(HINSTANCE hinstance, HWND hwnd);
 	vk::Result CreateSwapChain();
 	vk::Result CreateDepthBuffer();
-	void	   CreateUniformBuffer();
-	uint32_t   GetMemoryTypeIndex(uint32_t typeBits, vk::MemoryPropertyFlags properties);
+	vk::Result CreateUniformBuffer();
+	vk::Result CreatePipeline();
+
+	uint32_t    GetMemoryTypeIndex(uint32_t typeBits, vk::MemoryPropertyFlags properties);
+
 private:
 
 private:
@@ -45,4 +48,5 @@ private:
 	glm::mat4								m_MVP;				// Combination of clip, proj, view, model
 	vk::Buffer								m_UniformBuffer;	// Uniform buffer to send to the pipeline
 	vk::DeviceMemory						m_UniformMemory;	// Uniform Memory allocated for the uniform
+	vk::DescriptorSetLayout					m_DescriptorLayout;
 };

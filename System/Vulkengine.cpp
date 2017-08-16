@@ -274,7 +274,7 @@ vk::Result Vulkengine::CreateDepthBuffer()
 	return Result;
 }
 
-void Vulkengine::CreateUniformBuffer()
+vk::Result Vulkengine::CreateUniformBuffer()
 {
 	m_Model = glm::mat4(1.0f);
 	m_View = glm::lookAt(glm::vec3(0, 3, 10), glm::vec3(0, 0, 0), glm::vec3(0, -1, 0));
@@ -303,6 +303,21 @@ void Vulkengine::CreateUniformBuffer()
 	memcpy(pData, &m_MVP, sizeof(m_MVP));
 	m_Device.unmapMemory(m_UniformMemory);
 	m_Device.bindBufferMemory(m_UniformBuffer, m_UniformMemory, 0);
+	return vk::Result::eSuccess;
+}
+
+vk::Result Vulkengine::CreatePipeline()
+{
+	vk::DescriptorSetLayoutBinding layoutBinding;
+	layoutBinding.descriptorType = vk::DescriptorType::eUniformBuffer;
+	layoutBinding.descriptorCount = 1;
+	layoutBinding.stageFlags = vk::ShaderStageFlagBits::eVertex;
+
+	vk::DescriptorSetLayoutCreateInfo descriptorLayout;
+	descriptorLayout.bindingCount = 1;
+	descriptorLayout.pBindings = &layoutBinding;
+	auto Result = m_Device.createDescriptorSetLayout(&descriptorLayout, nullptr, &m_DescriptorLayout);
+	return Result;
 }
 
 // This function is used to request a device memory type that supports all the property flags we request (e.g. device local, host visibile)
